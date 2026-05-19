@@ -7,63 +7,84 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root { --teal: #048A81; --teal-dark: #036B63; --teal-light: #e0f2f1; --navy: #2E4057; --cream: #F7F5F0; --white: #fff; --red: #E05C5C; --green: #3DB88B; --text: #1a1a2e; --muted: #6b7280; --border: #e5e7eb; }
-    body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--text); min-height: 100vh; }
-    nav { background: var(--navy); padding: 0 32px; display: flex; align-items: center; justify-content: space-between; height: 64px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 12px rgba(0,0,0,0.2); }
-    .nav-brand { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 18px; color: white; }
-    .nav-brand span { color: var(--teal); }
-    .nav-right { display: flex; align-items: center; gap: 12px; }
-    .nav-link { color: rgba(255,255,255,0.75); font-size: 13px; text-decoration: none; padding: 6px 12px; border-radius: 8px; transition: all 0.2s; }
-    .nav-link:hover { color: white; background: rgba(255,255,255,0.1); }
-    .btn-logout { background: transparent; border: 1.5px solid rgba(255,255,255,0.3); color: white; padding: 7px 16px; border-radius: 8px; font-size: 13px; font-family: 'DM Sans', sans-serif; cursor: pointer; transition: all 0.2s; }
-    .btn-logout:hover { background: rgba(255,255,255,0.1); }
-    .container { max-width: 1200px; margin: 0 auto; padding: 32px 24px; }
-    .page-tabs { display: flex; gap: 8px; margin-bottom: 28px; flex-wrap: wrap; }
-    .page-tab { padding: 10px 22px; border-radius: 10px; cursor: pointer; font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 600; border: 1.5px solid var(--border); background: white; color: var(--muted); transition: all 0.2s; }
-    .page-tab.active { background: var(--navy); color: white; border-color: var(--navy); }
-    .page-tab:hover:not(.active) { border-color: var(--teal); color: var(--teal); }
-    .card { background: var(--white); border-radius: 16px; padding: 24px 28px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); margin-bottom: 20px; }
-    .section-title { font-family: 'Syne', sans-serif; font-size: 17px; font-weight: 700; color: var(--navy); margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
-    .stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-bottom: 24px; }
-    .stat-card { background: var(--white); border-radius: 14px; padding: 20px 22px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); border-left: 4px solid var(--teal); }
-    .stat-label { font-size: 12px; color: var(--muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; }
-    .stat-value { font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 800; color: var(--navy); }
-    .stat-sub { font-size: 12px; color: var(--muted); margin-top: 4px; }
-    .fortnight-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; flex-wrap: wrap; gap: 12px; }
-    .week-btn { width: 36px; height: 36px; border-radius: 8px; border: 1.5px solid var(--border); background: white; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; transition: all 0.2s; color: var(--navy); }
-    .week-btn:hover { border-color: var(--teal); color: var(--teal); }
-    .period-label { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; color: var(--navy); }
-    table { width: 100%; border-collapse: collapse; }
-    th { text-align: left; padding: 10px 14px; font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; border-bottom: 2px solid var(--border); }
-    td { padding: 12px 14px; border-bottom: 1px solid var(--border); font-size: 14px; }
-    tr:last-child td { border-bottom: none; }
-    tr:hover td { background: var(--cream); }
-    .emp-name { font-weight: 600; color: var(--navy); }
-    .emp-email { font-size: 12px; color: var(--muted); }
-    .hrs-cell { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 16px; color: var(--teal-dark); }
-    .badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; }
-    .badge-admin { background: #fef3c7; color: #92400e; }
-    .badge-emp { background: var(--teal-light); color: var(--teal-dark); }
-    .no-data { text-align: center; padding: 40px; color: var(--muted); font-size: 14px; }
-    .emp-form { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-    @media (max-width: 600px) { .emp-form { grid-template-columns: 1fr; } }
-    label { display: block; font-size: 12px; font-weight: 500; color: var(--navy); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
-    input, select { width: 100%; padding: 11px 14px; border: 1.5px solid var(--border); border-radius: 10px; font-size: 14px; font-family: 'DM Sans', sans-serif; color: var(--text); outline: none; transition: border-color 0.2s; background: white; }
-    input:focus, select:focus { border-color: var(--teal); }
-    .btn { padding: 11px 24px; border-radius: 10px; font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.2s; border: none; }
-    .btn-primary { background: linear-gradient(135deg, var(--teal), var(--teal-dark)); color: white; }
-    .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(4,138,129,0.3); }
-    .btn-danger { background: #fef2f2; color: var(--red); border: 1.5px solid #fecaca; }
-    .btn-danger:hover { background: var(--red); color: white; }
-    .btn-sm { padding: 6px 14px; font-size: 12px; }
-    .msg { font-size: 13px; padding: 10px 14px; border-radius: 8px; margin-top: 12px; display: none; }
-    .msg.success { background: #f0fdf4; color: var(--green); display: block; }
-    .msg.error { background: #fef2f2; color: var(--red); display: block; }
-    .reset-row { background: #fffbeb; border: 1.5px solid #fef3c7; border-radius: 10px; padding: 16px; margin-top: 16px; }
-    .action-btns { display: flex; gap: 8px; }
-    .tab-panel { display: none; }
-    .tab-panel.active { display: block; }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    :root{--teal:#048A81;--teal-dark:#036B63;--teal-light:#e0f2f1;--navy:#2E4057;--cream:#F7F5F0;--white:#fff;--red:#E05C5C;--green:#3DB88B;--text:#1a1a2e;--muted:#6b7280;--border:#e5e7eb;}
+    body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);min-height:100vh;}
+    nav{background:var(--navy);padding:0 32px;display:flex;align-items:center;justify-content:space-between;height:64px;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,0.2);}
+    .nav-brand{font-family:'Syne',sans-serif;font-weight:800;font-size:18px;color:white;}
+    .nav-brand span{color:var(--teal);}
+    .nav-right{display:flex;align-items:center;gap:12px;}
+    .nav-link{color:rgba(255,255,255,0.75);font-size:13px;text-decoration:none;padding:6px 12px;border-radius:8px;transition:all 0.2s;}
+    .nav-link:hover{color:white;background:rgba(255,255,255,0.1);}
+    .btn-logout{background:transparent;border:1.5px solid rgba(255,255,255,0.3);color:white;padding:7px 16px;border-radius:8px;font-size:13px;font-family:'DM Sans',sans-serif;cursor:pointer;}
+    .container{max-width:1200px;margin:0 auto;padding:32px 24px;}
+    .page-tabs{display:flex;gap:8px;margin-bottom:28px;flex-wrap:wrap;}
+    .page-tab{padding:10px 22px;border-radius:10px;cursor:pointer;font-family:'Syne',sans-serif;font-size:14px;font-weight:600;border:1.5px solid var(--border);background:white;color:var(--muted);transition:all 0.2s;}
+    .page-tab.active{background:var(--navy);color:white;border-color:var(--navy);}
+    .page-tab:hover:not(.active){border-color:var(--teal);color:var(--teal);}
+    .card{background:var(--white);border-radius:16px;padding:24px 28px;box-shadow:0 2px 12px rgba(0,0,0,0.06);margin-bottom:20px;}
+    .section-title{font-family:'Syne',sans-serif;font-size:17px;font-weight:700;color:var(--navy);margin-bottom:20px;display:flex;align-items:center;gap:10px;}
+    .stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-bottom:24px;}
+    .stat-card{background:var(--white);border-radius:14px;padding:20px 22px;box-shadow:0 2px 8px rgba(0,0,0,0.06);border-left:4px solid var(--teal);}
+    .stat-label{font-size:12px;color:var(--muted);font-weight:500;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px;}
+    .stat-value{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:var(--navy);}
+    .stat-sub{font-size:12px;color:var(--muted);margin-top:4px;}
+    .fortnight-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px;}
+    .week-btn{width:36px;height:36px;border-radius:8px;border:1.5px solid var(--border);background:white;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;color:var(--navy);}
+    .week-btn:hover{border-color:var(--teal);color:var(--teal);}
+    .period-label{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:var(--navy);}
+    table{width:100%;border-collapse:collapse;}
+    th{text-align:left;padding:10px 14px;font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.04em;border-bottom:2px solid var(--border);}
+    td{padding:10px 14px;border-bottom:1px solid var(--border);font-size:14px;}
+    tr:last-child td{border-bottom:none;}
+    tr:hover td{background:var(--cream);}
+    .emp-name{font-weight:600;color:var(--navy);}
+    .emp-email{font-size:12px;color:var(--muted);}
+    .hrs-cell{font-family:'Syne',sans-serif;font-weight:700;font-size:15px;color:var(--teal-dark);}
+    .badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;}
+    .badge-admin{background:#fef3c7;color:#92400e;}
+    .badge-emp{background:var(--teal-light);color:var(--teal-dark);}
+    .badge-approved{background:#dcfce7;color:#166534;}
+    .badge-pending{background:#fef3c7;color:#92400e;}
+    .badge-rejected{background:#fef2f2;color:var(--red);}
+    .no-data{text-align:center;padding:40px;color:var(--muted);font-size:14px;}
+    .emp-form{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+    @media(max-width:600px){.emp-form{grid-template-columns:1fr;}}
+    label{display:block;font-size:12px;font-weight:500;color:var(--navy);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:6px;}
+    input,select{width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:14px;font-family:'DM Sans',sans-serif;color:var(--text);outline:none;background:white;}
+    input:focus,select:focus{border-color:var(--teal);}
+    .btn{padding:11px 24px;border-radius:10px;font-family:'Syne',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all 0.2s;border:none;}
+    .btn-primary{background:linear-gradient(135deg,var(--teal),var(--teal-dark));color:white;}
+    .btn-primary:hover{transform:translateY(-1px);box-shadow:0 6px 16px rgba(4,138,129,0.3);}
+    .btn-danger{background:#fef2f2;color:var(--red);border:1.5px solid #fecaca;}
+    .btn-danger:hover{background:var(--red);color:white;}
+    .btn-sm{padding:6px 12px;font-size:12px;}
+    .btn-export{background:linear-gradient(135deg,#166534,#14532d);color:white;display:flex;align-items:center;gap:8px;}
+    .msg{font-size:13px;padding:10px 14px;border-radius:8px;margin-top:12px;display:none;}
+    .msg.success{background:#f0fdf4;color:var(--green);display:block;}
+    .msg.error{background:#fef2f2;color:var(--red);display:block;}
+    .reset-row{background:#fffbeb;border:1.5px solid #fef3c7;border-radius:10px;padding:16px;margin-top:16px;}
+    .action-btns{display:flex;gap:6px;flex-wrap:wrap;}
+    .tab-panel{display:none;}
+    .tab-panel.active{display:block;}
+    .approval-row{background:#f8fafc;border-radius:10px;margin-bottom:12px;padding:16px;}
+    .day-approval-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;margin-top:12px;}
+    @media(max-width:900px){.day-approval-grid{grid-template-columns:repeat(4,1fr);}}
+    @media(max-width:500px){.day-approval-grid{grid-template-columns:repeat(2,1fr);}}
+    .day-approval-card{border:1.5px solid var(--border);border-radius:8px;padding:10px;font-size:12px;background:white;}
+    .day-approval-card.approved{border-color:var(--green);background:#f0fdf4;}
+    .day-approval-card.rejected{border-color:var(--red);background:#fef2f2;}
+    .day-label{font-family:'Syne',sans-serif;font-weight:700;font-size:11px;color:var(--muted);text-transform:uppercase;}
+    .day-hrs{font-weight:700;color:var(--navy);margin:4px 0;}
+    .day-note{color:var(--muted);font-size:11px;margin-bottom:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .approve-btn{padding:4px 10px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;border:none;margin-right:4px;margin-top:6px;}
+    .approve-btn.yes{background:#dcfce7;color:#166534;}
+    .approve-btn.yes:hover{background:var(--green);color:white;}
+    .approve-btn.no{background:#fef2f2;color:var(--red);}
+    .approve-btn.no:hover{background:var(--red);color:white;}
+    .export-section{background:var(--white);border-radius:16px;padding:24px 28px;box-shadow:0 2px 12px rgba(0,0,0,0.06);margin-bottom:20px;}
+    .export-grid{display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:16px;align-items:end;}
+    @media(max-width:700px){.export-grid{grid-template-columns:1fr 1fr;}}
   </style>
 </head>
 <body>
@@ -77,9 +98,13 @@
 <div class="container">
   <div class="page-tabs">
     <button class="page-tab active" onclick="switchPage('overview')">📊 Overview</button>
+    <button class="page-tab" onclick="switchPage('approvals')">✅ Approvals</button>
     <button class="page-tab" onclick="switchPage('fortnightly')">📅 Fortnightly Hours</button>
+    <button class="page-tab" onclick="switchPage('export')">📥 Export</button>
     <button class="page-tab" onclick="switchPage('employees')">👥 Manage Employees</button>
   </div>
+
+  <!-- OVERVIEW -->
   <div class="tab-panel active" id="overviewPanel">
     <div class="stats-row" id="statsRow"></div>
     <div class="card">
@@ -87,6 +112,23 @@
       <table><thead><tr><th>Name</th><th>Email</th><th>Role</th><th>This Week (hrs)</th><th>This Fortnight (hrs)</th></tr></thead><tbody id="empOverviewTable"></tbody></table>
     </div>
   </div>
+
+  <!-- APPROVALS -->
+  <div class="tab-panel" id="approvalsPanel">
+    <div class="card">
+      <div class="fortnight-bar">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <button class="week-btn" onclick="changeApprovalWeek(-1)">‹</button>
+          <span class="period-label" id="approvalWeekLabel"></span>
+          <button class="week-btn" onclick="changeApprovalWeek(1)">›</button>
+        </div>
+        <button class="btn btn-primary btn-sm" onclick="goApprovalToday()">This Week</button>
+      </div>
+      <div id="approvalsList"></div>
+    </div>
+  </div>
+
+  <!-- FORTNIGHTLY -->
   <div class="tab-panel" id="fortnightlyPanel">
     <div class="card">
       <div class="fortnight-bar">
@@ -100,6 +142,26 @@
       <table><thead><tr><th>Employee</th><th>Week 1 (hrs)</th><th>Week 2 (hrs)</th><th>Fortnightly Total</th></tr></thead><tbody id="fortnightTable"></tbody></table>
     </div>
   </div>
+
+  <!-- EXPORT -->
+  <div class="tab-panel" id="exportPanel">
+    <div class="export-section">
+      <div class="section-title">📥 Export Timesheets to CSV/Excel</div>
+      <p style="font-size:14px;color:var(--muted);margin-bottom:20px;">Includes each employee's daily hours, break time, kilometres, notes, approval status and fortnightly totals.</p>
+      <div class="export-grid">
+        <div><label>Employee</label><select id="exportEmployee"><option value="all">All Employees</option></select></div>
+        <div><label>From Date</label><input type="date" id="exportFrom"/></div>
+        <div><label>To Date</label><input type="date" id="exportTo"/></div>
+        <div><button class="btn btn-export" onclick="exportToCSV()">⬇ Export CSV</button></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="section-title">Preview <span style="font-size:13px;font-weight:400;color:var(--muted)">(first 20 rows)</span></div>
+      <div style="overflow-x:auto;"><table><thead><tr id="previewHead"></tr></thead><tbody id="previewBody"></tbody></table></div>
+    </div>
+  </div>
+
+  <!-- EMPLOYEES -->
   <div class="tab-panel" id="employeesPanel">
     <div class="card">
       <div class="section-title">➕ Add New Employee</div>
@@ -128,132 +190,286 @@
     </div>
   </div>
 </div>
+
 <script src="auth.js"></script>
 <script>
-  const user = Auth.requireAuth('admin');
-  let fortnightStart = getCurrentFortnightStart();
-  let resetTarget = null;
-  function getCurrentFortnightStart() {
-    const monday = getMonday(new Date());
-    const ref = new Date('2024-01-01');
-    const diff = Math.floor((monday - ref) / (14 * 86400000));
-    const fn = new Date(ref); fn.setDate(fn.getDate() + diff * 14); return fn;
+  const adminUser=Auth.requireAuth('admin');
+  let fortnightStart=getCurrentFortnightStart();
+  let approvalWeekStart=getMonday(new Date());
+  let resetTarget=null;
+
+  function getMonday(d){const day=new Date(d);const dow=day.getDay();const diff=dow===0?-6:1-dow;day.setDate(day.getDate()+diff);day.setHours(0,0,0,0);return day;}
+  function dateKey(d){return d.toISOString().slice(0,10);}
+  function fmtDate(d){return d.toLocaleDateString('en-AU',{day:'numeric',month:'short',year:'numeric'});}
+
+  function calcHours(start,end,brk){
+    if(!start||!end)return 0;
+    const[sh,sm]=start.split(':').map(Number);const[eh,em]=end.split(':').map(Number);
+    let diff=(eh*60+em)-(sh*60+sm);diff-=(parseInt(brk)||0);
+    return diff>0?Math.round(diff/60*10)/10:0;
   }
-  function getMonday(d) { const day = new Date(d); const dow = day.getDay(); const diff = dow === 0 ? -6 : 1 - dow; day.setDate(day.getDate() + diff); day.setHours(0,0,0,0); return day; }
-  function dateKey(d) { return d.toISOString().slice(0,10); }
-  function fmtDate(d) { return d.toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' }); }
-  function calcHours(start, end, breakMins) {
-    if (!start || !end) return 0;
-    const [sh, sm] = start.split(':').map(Number); const [eh, em] = end.split(':').map(Number);
-    let diff = (eh * 60 + em) - (sh * 60 + sm); diff -= (parseInt(breakMins) || 0);
-    return diff > 0 ? Math.round(diff / 60 * 10) / 10 : 0;
+
+  function getUserHoursForWeek(uid,monday){
+    const raw=localStorage.getItem(`slnt_ts_${uid}_${dateKey(monday)}`);
+    if(!raw)return 0;
+    const data=JSON.parse(raw);
+    return Object.values(data).reduce((s,e)=>s+calcHours(e.start,e.end,e.breakMins),0);
   }
-  function getUserHoursForWeek(userId, monday) {
-    const raw = localStorage.getItem(`slnt_ts_${userId}_${dateKey(monday)}`);
-    if (!raw) return 0;
-    const data = JSON.parse(raw);
-    return Object.values(data).reduce((sum, e) => sum + calcHours(e.start, e.end, e.breakMins), 0);
+
+  function getApprovals(uid){const r=localStorage.getItem(`slnt_approvals_${uid}`);return r?JSON.parse(r):{};}
+  function saveApprovals(uid,data){localStorage.setItem(`slnt_approvals_${uid}`,JSON.stringify(data));}
+
+  function getCurrentFortnightStart(){
+    const monday=getMonday(new Date());const ref=new Date('2024-01-01');
+    const diff=Math.floor((monday-ref)/(14*86400000));const fn=new Date(ref);fn.setDate(fn.getDate()+diff*14);return fn;
   }
-  function switchPage(tab) {
-    document.querySelectorAll('.page-tab').forEach((t, i) => t.classList.toggle('active', ['overview','fortnightly','employees'][i] === tab));
-    document.querySelectorAll('.tab-panel').forEach((p, i) => p.classList.toggle('active', ['overviewPanel','fortnightlyPanel','employeesPanel'][i] === `${tab}Panel`));
-    if (tab === 'overview') renderOverview();
-    if (tab === 'fortnightly') renderFortnightly();
-    if (tab === 'employees') renderEmployees();
+
+  function switchPage(tab){
+    const tabs=['overview','approvals','fortnightly','export','employees'];
+    document.querySelectorAll('.page-tab').forEach((t,i)=>t.classList.toggle('active',tabs[i]===tab));
+    document.querySelectorAll('.tab-panel').forEach((p,i)=>p.classList.toggle('active',tabs[i]+'Panel'===tab+'Panel'));
+    if(tab==='overview')renderOverview();
+    if(tab==='approvals')renderApprovals();
+    if(tab==='fortnightly')renderFortnightly();
+    if(tab==='export')renderExport();
+    if(tab==='employees')renderEmployees();
   }
-  function renderOverview() {
-    const users = Auth.getUsers();
-    const monday = getMonday(new Date());
-    const fnStart = getCurrentFortnightStart();
-    const fnEnd = new Date(fnStart); fnEnd.setDate(fnEnd.getDate() + 13);
-    let totalThisWeek = 0, totalThisFn = 0;
-    const tbody = document.getElementById('empOverviewTable'); tbody.innerHTML = '';
-    users.forEach(u => {
-      const thisWeek = Math.round(getUserHoursForWeek(u.id, monday) * 10) / 10;
-      const week2 = new Date(fnStart); week2.setDate(week2.getDate() + 7);
-      const thisFn = Math.round((getUserHoursForWeek(u.id, fnStart) + getUserHoursForWeek(u.id, week2)) * 10) / 10;
-      totalThisWeek += thisWeek; totalThisFn += thisFn;
-      tbody.innerHTML += `<tr><td><div class="emp-name">${u.name}</div></td><td><div class="emp-email">${u.email}</div></td><td><span class="badge ${u.role==='admin'?'badge-admin':'badge-emp'}">${u.role}</span></td><td class="hrs-cell">${thisWeek}</td><td class="hrs-cell">${thisFn}</td></tr>`;
+
+  // OVERVIEW
+  function renderOverview(){
+    const users=Auth.getUsers();const monday=getMonday(new Date());
+    const fnStart=getCurrentFortnightStart();const fnEnd=new Date(fnStart);fnEnd.setDate(fnEnd.getDate()+13);
+    let tw=0,tf=0;const tbody=document.getElementById('empOverviewTable');tbody.innerHTML='';
+    users.forEach(u=>{
+      const thisWeek=Math.round(getUserHoursForWeek(u.id,monday)*10)/10;
+      const w2=new Date(fnStart);w2.setDate(w2.getDate()+7);
+      const thisFn=Math.round((getUserHoursForWeek(u.id,fnStart)+getUserHoursForWeek(u.id,w2))*10)/10;
+      tw+=thisWeek;tf+=thisFn;
+      tbody.innerHTML+=`<tr><td><div class="emp-name">${u.name}</div></td><td><div class="emp-email">${u.email}</div></td><td><span class="badge ${u.role==='admin'?'badge-admin':'badge-emp'}">${u.role}</span></td><td class="hrs-cell">${thisWeek}</td><td class="hrs-cell">${thisFn}</td></tr>`;
     });
-    if (users.length === 0) tbody.innerHTML = '<tr><td colspan="5" class="no-data">No employees yet.</td></tr>';
-    document.getElementById('statsRow').innerHTML = `
+    if(!users.length)tbody.innerHTML='<tr><td colspan="5" class="no-data">No employees yet.</td></tr>';
+    document.getElementById('statsRow').innerHTML=`
       <div class="stat-card"><div class="stat-label">Total Employees</div><div class="stat-value">${users.length}</div><div class="stat-sub">registered accounts</div></div>
-      <div class="stat-card"><div class="stat-label">Total Hours This Week</div><div class="stat-value">${totalThisWeek.toFixed(1)}</div><div class="stat-sub">across all staff</div></div>
-      <div class="stat-card"><div class="stat-label">Total This Fortnight</div><div class="stat-value">${totalThisFn.toFixed(1)}</div><div class="stat-sub">${fmtDate(fnStart)} – ${fmtDate(fnEnd)}</div></div>`;
+      <div class="stat-card"><div class="stat-label">This Week Total</div><div class="stat-value">${tw.toFixed(1)}</div><div class="stat-sub">hrs across all staff</div></div>
+      <div class="stat-card"><div class="stat-label">This Fortnight</div><div class="stat-value">${tf.toFixed(1)}</div><div class="stat-sub">${fmtDate(fnStart)} – ${fmtDate(fnEnd)}</div></div>`;
   }
-  function changeFortnight(dir) { fortnightStart = new Date(fortnightStart); fortnightStart.setDate(fortnightStart.getDate() + dir * 14); renderFortnightly(); }
-  function goCurrentFortnight() { fortnightStart = getCurrentFortnightStart(); renderFortnightly(); }
-  function renderFortnightly() {
-    const week2Start = new Date(fortnightStart); week2Start.setDate(week2Start.getDate() + 7);
-    const end = new Date(fortnightStart); end.setDate(end.getDate() + 13);
-    document.getElementById('fortnightLabel').textContent = `${fmtDate(fortnightStart)} — ${fmtDate(end)}`;
-    const users = Auth.getUsers(); const tbody = document.getElementById('fortnightTable'); tbody.innerHTML = '';
-    let totW1 = 0, totW2 = 0;
-    users.forEach(u => {
-      const w1 = Math.round(getUserHoursForWeek(u.id, fortnightStart) * 10) / 10;
-      const w2 = Math.round(getUserHoursForWeek(u.id, week2Start) * 10) / 10;
-      const total = Math.round((w1 + w2) * 10) / 10;
-      totW1 += w1; totW2 += w2;
-      tbody.innerHTML += `<tr><td><div class="emp-name">${u.name}</div><div class="emp-email">${u.email}</div></td><td>${w1}</td><td>${w2}</td><td class="hrs-cell">${total} hrs</td></tr>`;
+
+  // APPROVALS
+  function changeApprovalWeek(dir){approvalWeekStart=new Date(approvalWeekStart);approvalWeekStart.setDate(approvalWeekStart.getDate()+dir*7);renderApprovals();}
+  function goApprovalToday(){approvalWeekStart=getMonday(new Date());renderApprovals();}
+  const DAY_SHORT_AP=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+
+  function renderApprovals(){
+    const end=new Date(approvalWeekStart);end.setDate(end.getDate()+6);
+    document.getElementById('approvalWeekLabel').textContent=`${fmtDate(approvalWeekStart)} — ${fmtDate(end)}`;
+    const users=Auth.getUsers();const list=document.getElementById('approvalsList');list.innerHTML='';
+
+    users.forEach(u=>{
+      const wk=dateKey(approvalWeekStart);
+      const raw=localStorage.getItem(`slnt_ts_${u.id}_${wk}`);
+      const data=raw?JSON.parse(raw):{};
+      const approvals=getApprovals(u.id);
+      const hasDays=Object.values(data).some(e=>e.start||e.end);
+      if(!hasDays)return;
+
+      let daysHtml='';
+      for(let i=0;i<7;i++){
+        const day=new Date(approvalWeekStart);day.setDate(day.getDate()+i);
+        const dk=dateKey(day);const e=data[dk]||{};
+        if(!e.start&&!e.end)continue;
+        const hrs=calcHours(e.start,e.end,e.breakMins);
+        const ap=approvals[dk]||'pending';
+        daysHtml+=`<div class="day-approval-card ${ap==='approved'?'approved':ap==='rejected'?'rejected':''}">
+          <div class="day-label">${DAY_SHORT_AP[day.getDay()]} ${day.getDate()}</div>
+          <div class="day-hrs">${hrs} hrs</div>
+          ${e.breakMins?`<div style="font-size:11px;color:var(--muted)">Break: ${e.breakMins}min</div>`:''}
+          ${e.km?`<div style="font-size:11px;color:var(--muted)">KM: ${e.km}</div>`:''}
+          <div class="day-note" title="${e.note||''}">${e.note||'No note'}</div>
+          <span class="badge ${ap==='approved'?'badge-approved':ap==='rejected'?'badge-rejected':'badge-pending'}">${ap==='approved'?'✓ Approved':ap==='rejected'?'✗ Rejected':'⏳ Pending'}</span>
+          <div style="margin-top:8px;">
+            <button class="approve-btn yes" onclick="setApproval('${u.id}','${dk}','approved')">✓ Approve</button>
+            <button class="approve-btn no" onclick="setApproval('${u.id}','${dk}','rejected')">✗ Reject</button>
+          </div>
+        </div>`;
+      }
+      if(!daysHtml)return;
+      const totalHrs=Object.keys(data).reduce((s,dk)=>{const e=data[dk];return s+calcHours(e.start,e.end,e.breakMins);},0);
+      list.innerHTML+=`<div class="approval-row">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+          <div><div class="emp-name">${u.name}</div><div class="emp-email">${u.email}</div></div>
+          <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:14px;color:var(--teal-dark);">Week Total: ${Math.round(totalHrs*10)/10} hrs</div>
+        </div>
+        <div class="day-approval-grid">${daysHtml}</div>
+      </div>`;
     });
-    if (users.length === 0) tbody.innerHTML = '<tr><td colspan="4" class="no-data">No employees found.</td></tr>';
-    else tbody.innerHTML += `<tr style="background:#f0fdf4;font-weight:600;"><td>TOTALS</td><td>${Math.round(totW1*10)/10}</td><td>${Math.round(totW2*10)/10}</td><td class="hrs-cell">${Math.round((totW1+totW2)*10)/10} hrs</td></tr>`;
+    if(!list.innerHTML)list.innerHTML='<div class="no-data">No timesheets submitted for this week.</div>';
   }
-  function renderEmployees() {
-    const users = Auth.getUsers(); const tbody = document.getElementById('empMgmtTable'); tbody.innerHTML = '';
-    if (users.length === 0) { tbody.innerHTML = '<tr><td colspan="4" class="no-data">No accounts yet.</td></tr>'; return; }
-    users.forEach(u => {
-      tbody.innerHTML += `<tr>
+
+  function setApproval(uid,dk,status){
+    const approvals=getApprovals(uid);approvals[dk]=status;saveApprovals(uid,approvals);renderApprovals();
+  }
+
+  // FORTNIGHTLY
+  function changeFortnight(dir){fortnightStart=new Date(fortnightStart);fortnightStart.setDate(fortnightStart.getDate()+dir*14);renderFortnightly();}
+  function goCurrentFortnight(){fortnightStart=getCurrentFortnightStart();renderFortnightly();}
+
+  function renderFortnightly(){
+    const w2=new Date(fortnightStart);w2.setDate(w2.getDate()+7);
+    const end=new Date(fortnightStart);end.setDate(end.getDate()+13);
+    document.getElementById('fortnightLabel').textContent=`${fmtDate(fortnightStart)} — ${fmtDate(end)}`;
+    const users=Auth.getUsers();const tbody=document.getElementById('fortnightTable');tbody.innerHTML='';
+    let t1=0,t2=0;
+    users.forEach(u=>{
+      const w1h=Math.round(getUserHoursForWeek(u.id,fortnightStart)*10)/10;
+      const w2h=Math.round(getUserHoursForWeek(u.id,w2)*10)/10;
+      const tot=Math.round((w1h+w2h)*10)/10;t1+=w1h;t2+=w2h;
+      tbody.innerHTML+=`<tr><td><div class="emp-name">${u.name}</div><div class="emp-email">${u.email}</div></td><td>${w1h}</td><td>${w2h}</td><td class="hrs-cell">${tot} hrs</td></tr>`;
+    });
+    if(!users.length)tbody.innerHTML='<tr><td colspan="4" class="no-data">No employees found.</td></tr>';
+    else tbody.innerHTML+=`<tr style="background:#f0fdf4;font-weight:600;"><td>TOTALS</td><td>${Math.round(t1*10)/10}</td><td>${Math.round(t2*10)/10}</td><td class="hrs-cell">${Math.round((t1+t2)*10)/10} hrs</td></tr>`;
+  }
+
+  // EXPORT
+  function renderExport(){
+    const sel=document.getElementById('exportEmployee');
+    sel.innerHTML='<option value="all">All Employees</option>';
+    Auth.getUsers().forEach(u=>{sel.innerHTML+=`<option value="${u.id}">${u.name}</option>`;});
+    const fn=getCurrentFortnightStart();const fnEnd=new Date(fn);fnEnd.setDate(fnEnd.getDate()+13);
+    document.getElementById('exportFrom').value=dateKey(fn);
+    document.getElementById('exportTo').value=dateKey(fnEnd);
+    renderPreview();
+  }
+
+  function getExportRows(){
+    const uid=document.getElementById('exportEmployee').value;
+    const from=document.getElementById('exportFrom').value;
+    const to=document.getElementById('exportTo').value;
+    if(!from||!to)return[];
+    const users=uid==='all'?Auth.getUsers():Auth.getUsers().filter(u=>u.id===uid);
+    const DAY_NAMES=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+    const rows=[];
+    users.forEach(u=>{
+      const approvals=getApprovals(u.id);
+      let cur=getMonday(new Date(from));const toDate=new Date(to);
+      while(cur<=toDate){
+        const wk=dateKey(cur);
+        const raw=localStorage.getItem(`slnt_ts_${u.id}_${wk}`);
+        const data=raw?JSON.parse(raw):{};
+        for(let i=0;i<7;i++){
+          const day=new Date(cur);day.setDate(day.getDate()+i);const dk=dateKey(day);
+          if(dk<from||dk>to)continue;
+          const e=data[dk]||{};if(!e.start&&!e.end)continue;
+          const hrs=calcHours(e.start,e.end,e.breakMins);
+          const ap=approvals[dk]||'pending';
+          rows.push({
+            'Employee':u.name,'Email':u.email,'Date':dk,'Day':DAY_NAMES[day.getDay()],
+            'Start Time':e.start||'','End Time':e.end||'','Break (mins)':e.breakMins||0,
+            'Net Hours':hrs,'Kilometres':e.km||0,'Notes':e.note||'',
+            'Approval Status':ap.charAt(0).toUpperCase()+ap.slice(1)
+          });
+        }
+        cur.setDate(cur.getDate()+7);
+      }
+    });
+    return rows;
+  }
+
+  function renderPreview(){
+    const rows=getExportRows();
+    const head=document.getElementById('previewHead');const body=document.getElementById('previewBody');
+    if(!rows.length){head.innerHTML='';body.innerHTML='<tr><td colspan="11" class="no-data">No data for selected range.</td></tr>';return;}
+    const cols=Object.keys(rows[0]);
+    head.innerHTML=cols.map(c=>`<th>${c}</th>`).join('');
+    body.innerHTML=rows.slice(0,20).map(r=>`<tr>${cols.map(c=>`<td>${r[c]}</td>`).join('')}</tr>`).join('');
+    if(rows.length>20)body.innerHTML+=`<tr><td colspan="${cols.length}" style="text-align:center;color:var(--muted);padding:12px;">...and ${rows.length-20} more rows (all included in export)</td></tr>`;
+  }
+
+  function exportToCSV(){
+    const rows=getExportRows();
+    if(!rows.length){alert('No data to export for the selected range.');return;}
+    const uid=document.getElementById('exportEmployee').value;
+    const from=document.getElementById('exportFrom').value;
+    const to=document.getElementById('exportTo').value;
+    const users=uid==='all'?Auth.getUsers():Auth.getUsers().filter(u=>u.id===uid);
+    const cols=Object.keys(rows[0]);
+    let csv=cols.join(',')+'\n';
+    rows.forEach(r=>{csv+=cols.map(c=>`"${String(r[c]).replace(/"/g,'""')}"`).join(',')+'\n';});
+    csv+='\n"--- FORTNIGHTLY TOTALS ---"\n"Employee","Fortnight Start","Fortnight End","Total Hours"\n';
+    users.forEach(u=>{
+      let cur=getMonday(new Date(from));const toDate=new Date(to);
+      while(cur<=toDate){
+        const fnEnd=new Date(cur);fnEnd.setDate(fnEnd.getDate()+13);
+        const w1=getUserHoursForWeek(u.id,cur);
+        const w2start=new Date(cur);w2start.setDate(w2start.getDate()+7);
+        const w2=getUserHoursForWeek(u.id,w2start);
+        const tot=Math.round((w1+w2)*10)/10;
+        if(tot>0)csv+=`"${u.name}","${dateKey(cur)}","${dateKey(fnEnd)}","${tot}"\n`;
+        cur.setDate(cur.getDate()+14);
+      }
+    });
+    const blob=new Blob([csv],{type:'text/csv'});
+    const a=document.createElement('a');a.href=URL.createObjectURL(blob);
+    a.download=`SilverLiningsNT_Timesheets_${from}_to_${to}.csv`;a.click();
+  }
+
+  // EMPLOYEES
+  function renderEmployees(){
+    const users=Auth.getUsers();const tbody=document.getElementById('empMgmtTable');tbody.innerHTML='';
+    if(!users.length){tbody.innerHTML='<tr><td colspan="4" class="no-data">No accounts yet.</td></tr>';return;}
+    users.forEach(u=>{
+      tbody.innerHTML+=`<tr>
         <td><div class="emp-name">${u.name}</div></td>
         <td><div class="emp-email">${u.email}</div></td>
         <td><span class="badge ${u.role==='admin'?'badge-admin':'badge-emp'}">${u.role}</span></td>
         <td><div class="action-btns">
-          <button class="btn btn-danger btn-sm" onclick="openReset('${u.id}','${u.name.replace(/'/g,"\\'")}')">🔑 Reset Password</button>
+          <button class="btn btn-danger btn-sm" onclick="openReset('${u.id}','${u.name.replace(/'/g,"\\'")}')">🔑 Reset PW</button>
           <button class="btn btn-sm" style="background:#fef2f2;color:#e05c5c;border:1.5px solid #fecaca;" onclick="deleteEmployee('${u.id}','${u.name.replace(/'/g,"\\'")}')">🗑 Delete</button>
         </div></td>
       </tr>`;
     });
   }
-  function addEmployee() {
-    const name = document.getElementById('newName').value.trim();
-    const email = document.getElementById('newEmail').value.trim();
-    const role = document.getElementById('newRole').value;
-    const pass = document.getElementById('newPass').value;
-    if (!name || !email || !pass) { showMsg('addMsg', 'Please fill in all fields.', 'error'); return; }
-    if (pass.length < 6) { showMsg('addMsg', 'Password must be at least 6 characters.', 'error'); return; }
-    const result = Auth.register(name, email, pass, role);
-    if (result.success) {
-      showMsg('addMsg', `Account created for ${name}.`, 'success');
-      document.getElementById('newName').value = ''; document.getElementById('newEmail').value = ''; document.getElementById('newPass').value = '';
-      renderEmployees();
-    } else { showMsg('addMsg', result.message, 'error'); }
+
+  function addEmployee(){
+    const name=document.getElementById('newName').value.trim();
+    const email=document.getElementById('newEmail').value.trim();
+    const role=document.getElementById('newRole').value;
+    const pass=document.getElementById('newPass').value;
+    if(!name||!email||!pass){showMsg('addMsg','Please fill in all fields.','error');return;}
+    if(pass.length<6){showMsg('addMsg','Password must be at least 6 characters.','error');return;}
+    const result=Auth.register(name,email,pass,role);
+    if(result.success){showMsg('addMsg',`Account created for ${name}.`,'success');document.getElementById('newName').value='';document.getElementById('newEmail').value='';document.getElementById('newPass').value='';renderEmployees();}
+    else showMsg('addMsg',result.message,'error');
   }
-  function deleteEmployee(id, name) {
-    if (!confirm(`Are you sure you want to delete ${name}? This cannot be undone.`)) return;
-    const users = Auth.getUsers().filter(u => u.id !== id);
-    Auth.saveUsers(users); renderEmployees(); renderOverview();
+
+  function deleteEmployee(id,name){
+    if(!confirm(`Are you sure you want to delete ${name}? This cannot be undone.`))return;
+    Auth.saveUsers(Auth.getUsers().filter(u=>u.id!==id));renderEmployees();renderOverview();
   }
-  function openReset(id, name) {
-    resetTarget = id; document.getElementById('resetForName').textContent = name;
-    document.getElementById('resetNewPass').value = ''; document.getElementById('resetConfirmPass').value = '';
-    document.getElementById('resetPanel').style.display = 'block';
-    document.getElementById('resetMsg').className = 'msg'; document.getElementById('resetMsg').textContent = '';
-    document.getElementById('resetPanel').scrollIntoView({ behavior: 'smooth' });
+
+  function openReset(id,name){
+    resetTarget=id;document.getElementById('resetForName').textContent=name;
+    document.getElementById('resetNewPass').value='';document.getElementById('resetConfirmPass').value='';
+    document.getElementById('resetPanel').style.display='block';
+    document.getElementById('resetMsg').className='msg';document.getElementById('resetMsg').textContent='';
+    document.getElementById('resetPanel').scrollIntoView({behavior:'smooth'});
   }
-  function closeReset() { document.getElementById('resetPanel').style.display = 'none'; resetTarget = null; }
-  function doAdminReset() {
-    const np = document.getElementById('resetNewPass').value; const cp = document.getElementById('resetConfirmPass').value;
-    if (!np) { showMsg('resetMsg', 'Enter a new password.', 'error'); return; }
-    if (np !== cp) { showMsg('resetMsg', 'Passwords do not match.', 'error'); return; }
-    if (np.length < 6) { showMsg('resetMsg', 'Password must be at least 6 characters.', 'error'); return; }
-    const users = Auth.getUsers(); const idx = users.findIndex(u => u.id === resetTarget);
-    if (idx === -1) { showMsg('resetMsg', 'User not found.', 'error'); return; }
-    users[idx].password = np; Auth.saveUsers(users);
-    showMsg('resetMsg', `Password reset for ${users[idx].name}.`, 'success');
-    setTimeout(closeReset, 2000);
+  function closeReset(){document.getElementById('resetPanel').style.display='none';resetTarget=null;}
+
+  function doAdminReset(){
+    const np=document.getElementById('resetNewPass').value;const cp=document.getElementById('resetConfirmPass').value;
+    if(!np){showMsg('resetMsg','Enter a new password.','error');return;}
+    if(np!==cp){showMsg('resetMsg','Passwords do not match.','error');return;}
+    if(np.length<6){showMsg('resetMsg','Password must be at least 6 characters.','error');return;}
+    const users=Auth.getUsers();const idx=users.findIndex(u=>u.id===resetTarget);
+    if(idx===-1){showMsg('resetMsg','User not found.','error');return;}
+    users[idx].password=np;Auth.saveUsers(users);
+    showMsg('resetMsg',`Password reset for ${users[idx].name}.`,'success');setTimeout(closeReset,2000);
   }
-  function showMsg(id, text, type) { const el = document.getElementById(id); el.textContent = text; el.className = 'msg ' + type; }
+
+  function showMsg(id,text,type){const el=document.getElementById(id);el.textContent=text;el.className='msg '+type;}
+
   renderOverview();
+  document.addEventListener('change',e=>{if(['exportEmployee','exportFrom','exportTo'].includes(e.target.id))renderPreview();});
 </script>
 </body>
 </html>
