@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Silver Linings NT — Timesheet Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --teal: #048A81;
+      --teal-dark: #036B63;
+      --navy: #2E4057;
+      --navy-light: #3d5470;
+      --cream: #F7F5F0;
+      --white: #ffffff;
+      --red: #E05C5C;
+      --green: #3DB88B;
+      --text: #1a1a2e;
+      --muted: #6b7280;
+      --border: #e5e7eb;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--navy);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: absolute;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(4,138,129,0.25) 0%, transparent 70%);
+      top: -150px; right: -150px;
+      border-radius: 50%;
+    }
+    body::after {
+      content: '';
+      position: absolute;
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(4,138,129,0.15) 0%, transparent 70%);
+      bottom: -100px; left: -100px;
+      border-radius: 50%;
+    }
+
+    .card {
+      background: var(--white);
+      border-radius: 20px;
+      width: 100%;
+      max-width: 440px;
+      padding: 48px 40px;
+      position: relative;
+      z-index: 10;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.35);
+    }
+
+    .logo {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+    .logo-icon {
+      width: 60px; height: 60px;
+      background: linear-gradient(135deg, var(--teal), var(--navy));
+      border-radius: 16px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 14px;
+      font-size: 26px;
+    }
+    .logo h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--navy);
+      line-height: 1.2;
+    }
+    .logo p { font-size: 13px; color: var(--muted); margin-top: 4px; }
+
+    .tabs {
+      display: flex;
+      background: var(--cream);
+      border-radius: 10px;
+      padding: 4px;
+      margin-bottom: 28px;
+    }
+    .tab {
+      flex: 1;
+      text-align: center;
+      padding: 9px;
+      border-radius: 8px;
+      font-family: 'Syne', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      color: var(--muted);
+      transition: all 0.2s;
+      border: none;
+      background: transparent;
+    }
+    .tab.active {
+      background: var(--white);
+      color: var(--navy);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .panel { display: none; }
+    .panel.active { display: block; }
+
+    .form-group { margin-bottom: 18px; }
+    label {
+      display: block;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--navy);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 6px;
+    }
+    input {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      font-size: 14px;
+      font-family: 'DM Sans', sans-serif;
+      color: var(--text);
+      transition: border-color 0.2s;
+      outline: none;
+    }
+    input:focus { border-color: var(--teal); }
+
+    select {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      font-size: 14px;
+      font-family: 'DM Sans', sans-serif;
+      color: var(--text);
+      background: white;
+      outline: none;
+      cursor: pointer;
+    }
+    select:focus { border-color: var(--teal); }
+
+    .btn {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, var(--teal), var(--teal-dark));
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-family: 'Syne', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-top: 4px;
+    }
+    .btn:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(4,138,129,0.35); }
+    .btn:active { transform: translateY(0); }
+    .btn-outline {
+      background: transparent;
+      border: 1.5px solid var(--teal);
+      color: var(--teal);
+    }
+    .btn-outline:hover { background: var(--teal); color: white; box-shadow: none; }
+
+    .msg { font-size: 13px; text-align: center; margin-top: 14px; padding: 10px; border-radius: 8px; }
+    .msg.error { background: #fef2f2; color: var(--red); }
+    .msg.success { background: #f0fdf4; color: var(--green); }
+
+    .forgot-link {
+      text-align: right;
+      margin-top: -10px;
+      margin-bottom: 16px;
+    }
+    .forgot-link a {
+      font-size: 12px;
+      color: var(--teal);
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .forgot-link a:hover { text-decoration: underline; }
+
+    .reset-panel { display: none; }
+    .back-link {
+      font-size: 13px;
+      color: var(--teal);
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      margin-bottom: 20px;
+    }
+    .back-link:hover { text-decoration: underline; }
+
+    .role-badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      background: #e0f2f1;
+      color: var(--teal-dark);
+      margin-left: 6px;
+    }
+  </style>
+</head>
+<body>
+<div class="card">
+  <div class="logo">
+    <div class="logo-icon">🕐</div>
+    <h1>Silver Linings NT</h1>
+    <p>Timesheet Management Portal</p>
+  </div>
+
+  <!-- LOGIN / REGISTER TABS -->
+  <div id="authSection">
+    <div class="tabs">
+      <button class="tab active" onclick="switchTab('login')">Sign In</button>
+      <button class="tab" onclick="switchTab('register')">Register</button>
+    </div>
+
+    <!-- LOGIN -->
+    <div class="panel active" id="loginPanel">
+      <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" id="loginEmail" placeholder="you@silverliningsnt.com.au" />
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="loginPassword" placeholder="••••••••" />
+      </div>
+      <div class="forgot-link">
+        <a onclick="showReset()">Forgot password?</a>
+      </div>
+      <button class="btn" onclick="doLogin()">Sign In</button>
+      <div id="loginMsg"></div>
+    </div>
+
+    <!-- REGISTER -->
+    <div class="panel" id="registerPanel">
+      <div class="form-group">
+        <label>Full Name</label>
+        <input type="text" id="regName" placeholder="Jane Smith" />
+      </div>
+      <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" id="regEmail" placeholder="you@silverliningsnt.com.au" />
+      </div>
+      <div class="form-group">
+        <label>Role</label>
+        <select id="regRole">
+          <option value="employee">Employee</option>
+          <option value="admin">Admin / Manager</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="regPassword" placeholder="Min 6 characters" />
+      </div>
+      <div class="form-group">
+        <label>Confirm Password</label>
+        <input type="password" id="regConfirm" placeholder="Re-enter password" />
+      </div>
+      <button class="btn" onclick="doRegister()">Create Account</button>
+      <div id="registerMsg"></div>
+    </div>
+  </div>
+
+  <!-- FORGOT PASSWORD -->
+  <div class="reset-panel" id="resetSection">
+    <a class="back-link" onclick="hideReset()">← Back to Sign In</a>
+    <div class="form-group">
+      <label>Enter your Email</label>
+      <input type="email" id="resetEmail" placeholder="you@silverliningsnt.com.au" />
+    </div>
+    <div class="form-group">
+      <label>New Password</label>
+      <input type="password" id="resetNew" placeholder="New password" />
+    </div>
+    <div class="form-group">
+      <label>Confirm New Password</label>
+      <input type="password" id="resetConfirm" placeholder="Re-enter new password" />
+    </div>
+    <button class="btn" onclick="doReset()">Reset Password</button>
+    <div id="resetMsg"></div>
+  </div>
+</div>
+
+<script src="auth.js"></script>
+<script>
+  function switchTab(tab) {
+    document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', (tab==='login'&&i===0)||(tab==='register'&&i===1)));
+    document.getElementById('loginPanel').classList.toggle('active', tab==='login');
+    document.getElementById('registerPanel').classList.toggle('active', tab==='register');
+  }
+  function showReset() {
+    document.getElementById('authSection').style.display = 'none';
+    document.getElementById('resetSection').style.display = 'block';
+  }
+  function hideReset() {
+    document.getElementById('authSection').style.display = 'block';
+    document.getElementById('resetSection').style.display = 'none';
+  }
+  function showMsg(id, text, type) {
+    const el = document.getElementById(id);
+    el.className = 'msg ' + type;
+    el.textContent = text;
+  }
+  function doLogin() {
+    const email = document.getElementById('loginEmail').value.trim();
+    const pass = document.getElementById('loginPassword').value;
+    const result = Auth.login(email, pass);
+    if (result.success) {
+      window.location.href = result.user.role === 'admin' ? 'dashboard.html' : 'timesheet.html';
+    } else {
+      showMsg('loginMsg', result.message, 'error');
+    }
+  }
+  function doRegister() {
+    const name = document.getElementById('regName').value.trim();
+    const email = document.getElementById('regEmail').value.trim();
+    const role = document.getElementById('regRole').value;
+    const pass = document.getElementById('regPassword').value;
+    const confirm = document.getElementById('regConfirm').value;
+    if (!name || !email || !pass) return showMsg('registerMsg', 'Please fill in all fields.', 'error');
+    if (pass !== confirm) return showMsg('registerMsg', 'Passwords do not match.', 'error');
+    if (pass.length < 6) return showMsg('registerMsg', 'Password must be at least 6 characters.', 'error');
+    const result = Auth.register(name, email, pass, role);
+    if (result.success) {
+      showMsg('registerMsg', 'Account created! You can now sign in.', 'success');
+      setTimeout(() => switchTab('login'), 1500);
+    } else {
+      showMsg('registerMsg', result.message, 'error');
+    }
+  }
+  function doReset() {
+    const email = document.getElementById('resetEmail').value.trim();
+    const newPass = document.getElementById('resetNew').value;
+    const confirm = document.getElementById('resetConfirm').value;
+    if (!email || !newPass) return showMsg('resetMsg', 'Please fill in all fields.', 'error');
+    if (newPass !== confirm) return showMsg('resetMsg', 'Passwords do not match.', 'error');
+    if (newPass.length < 6) return showMsg('resetMsg', 'Password must be at least 6 characters.', 'error');
+    const result = Auth.resetPassword(email, newPass);
+    if (result.success) {
+      showMsg('resetMsg', 'Password reset! You can now sign in.', 'success');
+      setTimeout(() => hideReset(), 1500);
+    } else {
+      showMsg('resetMsg', result.message, 'error');
+    }
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Dashboard — Silver Linings NT</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --teal: #048A81; --teal-dark: #036B63; --teal-light: #e0f2f1;
+      --navy: #2E4057; --cream: #F7F5F0; --white: #fff;
+      --red: #E05C5C; --green: #3DB88B; --amber: #F59E0B;
+      --text: #1a1a2e; --muted: #6b7280; --border: #e5e7eb;
+    }
+    body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--text); min-height: 100vh; }
+
+    nav {
+      background: var(--navy); padding: 0 32px;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 64px; position: sticky; top: 0; z-index: 100;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.2);
+    }
+    .nav-brand { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 18px; color: white; }
+    .nav-brand span { color: var(--teal); }
+    .nav-right { display: flex; align-items: center; gap: 12px; }
+    .nav-link { color: rgba(255,255,255,0.75); font-size: 13px; text-decoration: none; padding: 6px 12px; border-radius: 8px; transition: all 0.2s; }
+    .nav-link:hover { color: white; background: rgba(255,255,255,0.1); }
+    .btn-logout { background: transparent; border: 1.5px solid rgba(255,255,255,0.3); color: white; padding: 7px 16px; border-radius: 8px; font-size: 13px; font-family: 'DM Sans', sans-serif; cursor: pointer; transition: all 0.2s; }
+    .btn-logout:hover { background: rgba(255,255,255,0.1); }
+
+    .container { max-width: 1200px; margin: 0 auto; padding: 32px 24px; }
+
+    /* TABS */
+    .page-tabs { display: flex; gap: 8px; margin-bottom: 28px; flex-wrap: wrap; }
+    .page-tab {
+      padding: 10px 22px; border-radius: 10px; cursor: pointer;
+      font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 600;
+      border: 1.5px solid var(--border); background: white; color: var(--muted);
+      transition: all 0.2s;
+    }
+    .page-tab.active { background: var(--navy); color: white; border-color: var(--navy); }
+    .page-tab:hover:not(.active) { border-color: var(--teal); color: var(--teal); }
+
+    /* CARDS */
+    .card { background: var(--white); border-radius: 16px; padding: 24px 28px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); margin-bottom: 20px; }
+    .section-title { font-family: 'Syne', sans-serif; font-size: 17px; font-weight: 700; color: var(--navy); margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+
+    /* STAT CARDS */
+    .stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-bottom: 24px; }
+    .stat-card { background: var(--white); border-radius: 14px; padding: 20px 22px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); border-left: 4px solid var(--teal); }
+    .stat-label { font-size: 12px; color: var(--muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; }
+    .stat-value { font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 800; color: var(--navy); }
+    .stat-sub { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+    /* FORTNIGHTLY */
+    .fortnight-bar {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 20px; flex-wrap: wrap; gap: 12px;
+    }
+    .week-btn { width: 36px; height: 36px; border-radius: 8px; border: 1.5px solid var(--border); background: white; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; transition: all 0.2s; color: var(--navy); }
+    .week-btn:hover { border-color: var(--teal); color: var(--teal); }
+    .period-label { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; color: var(--navy); }
+
+    /* TABLE */
+    table { width: 100%; border-collapse: collapse; }
+    th { text-align: left; padding: 10px 14px; font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; border-bottom: 2px solid var(--border); }
+    td { padding: 12px 14px; border-bottom: 1px solid var(--border); font-size: 14px; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: var(--cream); }
+    .emp-name { font-weight: 600; color: var(--navy); }
+    .emp-email { font-size: 12px; color: var(--muted); }
+    .hrs-cell { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 16px; color: var(--teal-dark); }
+    .badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+    .badge-admin { background: #fef3c7; color: #92400e; }
+    .badge-emp { background: var(--teal-light); color: var(--teal-dark); }
+    .no-data { text-align: center; padding: 40px; color: var(--muted); font-size: 14px; }
+
+    /* EMPLOYEE MANAGEMENT */
+    .emp-form { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 600px) { .emp-form { grid-template-columns: 1fr; } }
+    label { display: block; font-size: 12px; font-weight: 500; color: var(--navy); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
+    input, select { width: 100%; padding: 11px 14px; border: 1.5px solid var(--border); border-radius: 10px; font-size: 14px; font-family: 'DM Sans', sans-serif; color: var(--text); outline: none; transition: border-color 0.2s; background: white; }
+    input:focus, select:focus { border-color: var(--teal); }
+    .btn { padding: 11px 24px; border-radius: 10px; font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.2s; border: none; }
+    .btn-primary { background: linear-gradient(135deg, var(--teal), var(--teal-dark)); color: white; }
+    .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(4,138,129,0.3); }
+    .btn-danger { background: #fef2f2; color: var(--red); border: 1.5px solid #fecaca; }
+    .btn-danger:hover { background: var(--red); color: white; }
+    .btn-sm { padding: 6px 14px; font-size: 12px; }
+    .msg { font-size: 13px; padding: 10px 14px; border-radius: 8px; margin-top: 12px; display: none; }
+    .msg.success { background: #f0fdf4; color: var(--green); display: block; }
+    .msg.error { background: #fef2f2; color: var(--red); display: block; }
+
+    /* RESET PASS */
+    .reset-row { background: #fffbeb; border: 1.5px solid #fef3c7; border-radius: 10px; padding: 16px; margin-top: 16px; }
+    .action-btns { display: flex; gap: 8px; }
+
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+  </style>
+</head>
+<body>
+<nav>
+  <div class="nav-brand">Silver Linings <span>NT</span> — Admin</div>
+  <div class="nav-right">
+    <a href="timesheet.html" class="nav-link">🕐 My Timesheet</a>
+    <button class="btn-logout" onclick="Auth.logout()">Sign Out</button>
+  </div>
+</nav>
+
+<div class="container">
+  <div class="page-tabs">
+    <button class="page-tab active" onclick="switchPage('overview')">📊 Overview</button>
+    <button class="page-tab" onclick="switchPage('fortnightly')">📅 Fortnightly Hours</button>
+    <button class="page-tab" onclick="switchPage('employees')">👥 Manage Employees</button>
+  </div>
+
+  <!-- OVERVIEW -->
+  <div class="tab-panel active" id="overviewPanel">
+    <div class="stats-row" id="statsRow"></div>
+    <div class="card">
+      <div class="section-title">👥 All Employees</div>
+      <table>
+        <thead><tr><th>Name</th><th>Email</th><th>Role</th><th>This Week (hrs)</th><th>This Fortnight (hrs)</th></tr></thead>
+        <tbody id="empOverviewTable"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- FORTNIGHTLY -->
+  <div class="tab-panel" id="fortnightlyPanel">
+    <div class="card">
+      <div class="fortnight-bar">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <button class="week-btn" onclick="changeFortnight(-1)">‹</button>
+          <span class="period-label" id="fortnightLabel"></span>
+          <button class="week-btn" onclick="changeFortnight(1)">›</button>
+        </div>
+        <button class="btn btn-primary btn-sm" onclick="goCurrentFortnight()">Current Period</button>
+      </div>
+      <table>
+        <thead><tr><th>Employee</th><th>Week 1 (hrs)</th><th>Week 2 (hrs)</th><th>Fortnightly Total</th></tr></thead>
+        <tbody id="fortnightTable"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- EMPLOYEES -->
+  <div class="tab-panel" id="employeesPanel">
+    <!-- ADD -->
+    <div class="card">
+      <div class="section-title">➕ Add New Employee</div>
+      <div class="emp-form">
+        <div>
+          <label>Full Name</label>
+          <input type="text" id="newName" placeholder="Jane Smith"/>
+        </div>
+        <div>
+          <label>Email Address</label>
+          <input type="email" id="newEmail" placeholder="jane@silverliningsnt.com.au"/>
+        </div>
+        <div>
+          <label>Role</label>
+          <select id="newRole">
+            <option value="employee">Employee</option>
+            <option value="admin">Admin / Manager</option>
+          </select>
+        </div>
+        <div>
+          <label>Temporary Password</label>
+          <input type="text" id="newPass" placeholder="e.g. Welcome@2024"/>
+        </div>
+      </div>
+      <div style="margin-top:16px;">
+        <button class="btn btn-primary" onclick="addEmployee()">Create Account</button>
+      </div>
+      <div class="msg" id="addMsg"></div>
+    </div>
+
+    <!-- EMPLOYEE LIST -->
+    <div class="card">
+      <div class="section-title">👥 All Accounts</div>
+      <table>
+        <thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Actions</th></tr></thead>
+        <tbody id="empMgmtTable"></tbody>
+      </table>
+    </div>
+
+    <!-- RESET PANEL -->
+    <div class="reset-row" id="resetPanel" style="display:none">
+      <div class="section-title" style="margin-bottom:14px;">🔑 Reset Password for <span id="resetForName"></span></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr auto;gap:12px;align-items:end;">
+        <div>
+          <label>New Password</label>
+          <input type="text" id="resetNewPass" placeholder="New password"/>
+        </div>
+        <div>
+          <label>Confirm Password</label>
+          <input type="text" id="resetConfirmPass" placeholder="Re-enter"/>
+        </div>
+        <button class="btn btn-primary" onclick="doAdminReset()">Reset</button>
+      </div>
+      <div class="msg" id="resetMsg"></div>
+      <div style="margin-top:12px;"><a style="font-size:13px;color:var(--muted);cursor:pointer;" onclick="closeReset()">Cancel</a></div>
+    </div>
+  </div>
+</div>
+
+<script src="auth.js"></script>
+<script>
+  const user = Auth.requireAuth('admin');
+
+  let fortnightStart = getCurrentFortnightStart();
+  let resetTarget = null;
+
+  function getCurrentFortnightStart() {
+    const monday = getMonday(new Date());
+    // Align to fortnights from a fixed reference
+    const ref = new Date('2024-01-01');
+    const diff = Math.floor((monday - ref) / (14 * 86400000));
+    const fn = new Date(ref);
+    fn.setDate(fn.getDate() + diff * 14);
+    return fn;
+  }
+
+  function getMonday(d) {
+    const day = new Date(d);
+    const dow = day.getDay();
+    const diff = dow === 0 ? -6 : 1 - dow;
+    day.setDate(day.getDate() + diff);
+    day.setHours(0,0,0,0);
+    return day;
+  }
+
+  function dateKey(d) { return d.toISOString().slice(0,10); }
+
+  function fmtDate(d) {
+    const opts = { day: 'numeric', month: 'short', year: 'numeric' };
+    return d.toLocaleDateString('en-AU', opts);
+  }
+
+  function calcHours(start, end) {
+    if (!start || !end) return 0;
+    const [sh, sm] = start.split(':').map(Number);
+    const [eh, em] = end.split(':').map(Number);
+    const diff = (eh * 60 + em) - (sh * 60 + sm);
+    return diff > 0 ? Math.round(diff / 60 * 10) / 10 : 0;
+  }
+
+  function getUserHoursForWeek(userId, monday) {
+    const weekKey = dateKey(monday);
+    const raw = localStorage.getItem(`slnt_ts_${userId}_${weekKey}`);
+    if (!raw) return 0;
+    const data = JSON.parse(raw);
+    return Object.values(data).reduce((sum, e) => sum + calcHours(e.start, e.end), 0);
+  }
+
+  function switchPage(tab) {
+    document.querySelectorAll('.page-tab').forEach((t, i) => {
+      t.classList.toggle('active', ['overview','fortnightly','employees'][i] === tab);
+    });
+    document.querySelectorAll('.tab-panel').forEach((p, i) => {
+      p.classList.toggle('active', ['overviewPanel','fortnightlyPanel','employeesPanel'][i] === `${tab}Panel`);
+    });
+    if (tab === 'overview') renderOverview();
+    if (tab === 'fortnightly') renderFortnightly();
+    if (tab === 'employees') renderEmployees();
+  }
+
+  function renderOverview() {
+    const users = Auth.getUsers().filter(u => u.role === 'employee' || u.role === 'admin');
+    const monday = getMonday(new Date());
+    const w1 = dateKey(monday);
+    const fnStart = getCurrentFortnightStart();
+    const fnEnd = new Date(fnStart); fnEnd.setDate(fnEnd.getDate() + 13);
+
+    let totalThisWeek = 0, totalThisFn = 0;
+    const tbody = document.getElementById('empOverviewTable');
+    tbody.innerHTML = '';
+
+    users.forEach(u => {
+      const thisWeek = Math.round(getUserHoursForWeek(u.id, monday) * 10) / 10;
+      const week2 = new Date(fnStart); week2.setDate(week2.getDate() + 7);
+      const thisFn = Math.round((getUserHoursForWeek(u.id, fnStart) + getUserHoursForWeek(u.id, week2)) * 10) / 10;
+      totalThisWeek += thisWeek;
+      totalThisFn += thisFn;
+      tbody.innerHTML += `<tr>
+        <td><div class="emp-name">${u.name}</div></td>
+        <td><div class="emp-email">${u.email}</div></td>
+        <td><span class="badge ${u.role==='admin'?'badge-admin':'badge-emp'}">${u.role}</span></td>
+        <td class="hrs-cell">${thisWeek}</td>
+        <td class="hrs-cell">${thisFn}</td>
+      </tr>`;
+    });
+
+    if (users.length === 0) tbody.innerHTML = '<tr><td colspan="5" class="no-data">No employees yet. Add accounts in Manage Employees.</td></tr>';
+
+    document.getElementById('statsRow').innerHTML = `
+      <div class="stat-card"><div class="stat-label">Total Employees</div><div class="stat-value">${users.length}</div><div class="stat-sub">registered accounts</div></div>
+      <div class="stat-card"><div class="stat-label">Total Hours This Week</div><div class="stat-value">${totalThisWeek.toFixed(1)}</div><div class="stat-sub">across all staff</div></div>
+      <div class="stat-card"><div class="stat-label">Total This Fortnight</div><div class="stat-value">${totalThisFn.toFixed(1)}</div><div class="stat-sub">${fmtDate(fnStart)} – ${fmtDate(fnEnd)}</div></div>
+    `;
+  }
+
+  function changeFortnight(dir) {
+    fortnightStart = new Date(fortnightStart);
+    fortnightStart.setDate(fortnightStart.getDate() + dir * 14);
+    renderFortnightly();
+  }
+
+  function goCurrentFortnight() {
+    fortnightStart = getCurrentFortnightStart();
+    renderFortnightly();
+  }
+
+  function renderFortnightly() {
+    const week2Start = new Date(fortnightStart); week2Start.setDate(week2Start.getDate() + 7);
+    const end = new Date(fortnightStart); end.setDate(end.getDate() + 13);
+    document.getElementById('fortnightLabel').textContent = `${fmtDate(fortnightStart)} — ${fmtDate(end)}`;
+
+    const users = Auth.getUsers();
+    const tbody = document.getElementById('fortnightTable');
+    tbody.innerHTML = '';
+    let totW1 = 0, totW2 = 0;
+
+    users.forEach(u => {
+      const w1 = Math.round(getUserHoursForWeek(u.id, fortnightStart) * 10) / 10;
+      const w2 = Math.round(getUserHoursForWeek(u.id, week2Start) * 10) / 10;
+      const total = Math.round((w1 + w2) * 10) / 10;
+      totW1 += w1; totW2 += w2;
+      tbody.innerHTML += `<tr>
+        <td><div class="emp-name">${u.name}</div><div class="emp-email">${u.email}</div></td>
+        <td>${w1}</td>
+        <td>${w2}</td>
+        <td class="hrs-cell">${total} hrs</td>
+      </tr>`;
+    });
+
+    if (users.length === 0) tbody.innerHTML = '<tr><td colspan="4" class="no-data">No employees found.</td></tr>';
+    else tbody.innerHTML += `<tr style="background:#f0fdf4;font-weight:600;">
+      <td>TOTALS</td><td>${Math.round(totW1*10)/10}</td><td>${Math.round(totW2*10)/10}</td>
+      <td class="hrs-cell">${Math.round((totW1+totW2)*10)/10} hrs</td>
+    </tr>`;
+  }
+
+  function renderEmployees() {
+    const users = Auth.getUsers();
+    const tbody = document.getElementById('empMgmtTable');
+    tbody.innerHTML = '';
+    if (users.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="4" class="no-data">No accounts yet.</td></tr>';
+      return;
+    }
+    users.forEach(u => {
+      tbody.innerHTML += `<tr>
+        <td><div class="emp-name">${u.name}</div></td>
+        <td><div class="emp-email">${u.email}</div></td>
+        <td><span class="badge ${u.role==='admin'?'badge-admin':'badge-emp'}">${u.role}</span></td>
+        <td>
+          <div class="action-btns">
+            <button class="btn btn-danger btn-sm" onclick="openReset('${u.id}','${u.name.replace(/'/g,"\\'")}')">🔑 Reset Password</button>
+          </div>
+        </td>
+      </tr>`;
+    });
+  }
+
+  function addEmployee() {
+    const name = document.getElementById('newName').value.trim();
+    const email = document.getElementById('newEmail').value.trim();
+    const role = document.getElementById('newRole').value;
+    const pass = document.getElementById('newPass').value;
+    const msg = document.getElementById('addMsg');
+    if (!name || !email || !pass) { showMsg('addMsg', 'Please fill in all fields.', 'error'); return; }
+    if (pass.length < 6) { showMsg('addMsg', 'Password must be at least 6 characters.', 'error'); return; }
+    const result = Auth.register(name, email, pass, role);
+    if (result.success) {
+      showMsg('addMsg', `Account created for ${name}. They can log in at index.html.`, 'success');
+      document.getElementById('newName').value = '';
+      document.getElementById('newEmail').value = '';
+      document.getElementById('newPass').value = '';
+    } else {
+      showMsg('addMsg', result.message, 'error');
+    }
+  }
+
+  function openReset(id, name) {
+    resetTarget = id;
+    document.getElementById('resetForName').textContent = name;
+    document.getElementById('resetNewPass').value = '';
+    document.getElementById('resetConfirmPass').value = '';
+    document.getElementById('resetPanel').style.display = 'block';
+    document.getElementById('resetMsg').className = 'msg';
+    document.getElementById('resetMsg').textContent = '';
+    document.getElementById('resetPanel').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  function closeReset() {
+    document.getElementById('resetPanel').style.display = 'none';
+    resetTarget = null;
+  }
+
+  function doAdminReset() {
+    const np = document.getElementById('resetNewPass').value;
+    const cp = document.getElementById('resetConfirmPass').value;
+    if (!np) { showMsg('resetMsg', 'Enter a new password.', 'error'); return; }
+    if (np !== cp) { showMsg('resetMsg', 'Passwords do not match.', 'error'); return; }
+    if (np.length < 6) { showMsg('resetMsg', 'Password must be at least 6 characters.', 'error'); return; }
+    const users = Auth.getUsers();
+    const idx = users.findIndex(u => u.id === resetTarget);
+    if (idx === -1) { showMsg('resetMsg', 'User not found.', 'error'); return; }
+    users[idx].password = np;
+    Auth.saveUsers(users);
+    showMsg('resetMsg', `Password reset for ${users[idx].name}.`, 'success');
+    setTimeout(closeReset, 2000);
+  }
+
+  function showMsg(id, text, type) {
+    const el = document.getElementById(id);
+    el.textContent = text;
+    el.className = 'msg ' + type;
+  }
+
+  renderOverview();
+</script>
+</body>
+</html>
