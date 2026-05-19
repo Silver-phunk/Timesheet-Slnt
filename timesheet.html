@@ -7,74 +7,72 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root {
-      --teal: #048A81; --teal-dark: #036B63; --teal-light: #e0f2f1;
-      --navy: #2E4057; --cream: #F7F5F0; --white: #fff;
-      --red: #E05C5C; --green: #3DB88B; --amber: #F59E0B;
-      --text: #1a1a2e; --muted: #6b7280; --border: #e5e7eb;
-    }
-    body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--text); min-height: 100vh; }
-    nav {
-      background: var(--navy); padding: 0 32px;
-      display: flex; align-items: center; justify-content: space-between;
-      height: 64px; position: sticky; top: 0; z-index: 100;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.2);
-    }
-    .nav-brand { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 18px; color: white; }
-    .nav-brand span { color: var(--teal); }
-    .nav-right { display: flex; align-items: center; gap: 16px; }
-    .user-pill { background: rgba(255,255,255,0.1); border-radius: 20px; padding: 6px 14px; font-size: 13px; color: white; }
-    .btn-logout { background: transparent; border: 1.5px solid rgba(255,255,255,0.3); color: white; padding: 7px 16px; border-radius: 8px; font-size: 13px; font-family: 'DM Sans', sans-serif; cursor: pointer; transition: all 0.2s; }
-    .btn-logout:hover { background: rgba(255,255,255,0.1); }
-    .nav-link { color: rgba(255,255,255,0.75); font-size: 13px; text-decoration: none; padding: 6px 12px; border-radius: 8px; transition: all 0.2s; }
-    .nav-link:hover { color: white; background: rgba(255,255,255,0.1); }
-    .container { max-width: 1100px; margin: 0 auto; padding: 32px 24px; }
-    .week-bar { background: var(--white); border-radius: 16px; padding: 20px 28px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); flex-wrap: wrap; gap: 16px; }
-    .week-nav { display: flex; align-items: center; gap: 14px; }
-    .week-btn { width: 36px; height: 36px; border-radius: 8px; border: 1.5px solid var(--border); background: white; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; transition: all 0.2s; color: var(--navy); }
-    .week-btn:hover { border-color: var(--teal); color: var(--teal); }
-    .week-label { font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700; color: var(--navy); }
-    .week-total { background: var(--teal-light); color: var(--teal-dark); padding: 8px 20px; border-radius: 20px; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 14px; }
-    .btn-today { background: var(--teal); color: white; border: none; padding: 8px 18px; border-radius: 8px; cursor: pointer; font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 600; transition: all 0.2s; }
-    .btn-today:hover { background: var(--teal-dark); }
-    .days-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 12px; margin-bottom: 24px; }
-    @media (max-width: 900px) { .days-grid { grid-template-columns: repeat(4, 1fr); } }
-    @media (max-width: 600px) { .days-grid { grid-template-columns: repeat(2, 1fr); } }
-    .day-card { background: var(--white); border-radius: 14px; padding: 16px; border: 2px solid var(--border); transition: all 0.2s; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
-    .day-card.today { border-color: var(--teal); box-shadow: 0 4px 16px rgba(4,138,129,0.15); }
-    .day-card.weekend { background: #f9fafb; }
-    .day-name { font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); margin-bottom: 2px; }
-    .day-date { font-size: 20px; font-weight: 600; color: var(--navy); margin-bottom: 12px; }
-    .day-card.today .day-date { color: var(--teal); }
-    .time-row { display: flex; flex-direction: column; gap: 6px; margin-bottom: 8px; }
-    .time-row label { font-size: 11px; color: var(--muted); font-weight: 500; }
-    .time-input { width: 100%; padding: 7px 10px; border: 1.5px solid var(--border); border-radius: 8px; font-size: 13px; font-family: 'DM Sans', sans-serif; outline: none; transition: border-color 0.2s; }
-    .time-input:focus { border-color: var(--teal); }
-    .hours-badge { text-align: center; padding: 6px 8px; background: var(--teal-light); color: var(--teal-dark); border-radius: 8px; font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; margin-top: 4px; }
-    .hours-badge.zero { background: #f3f4f6; color: var(--muted); }
-    .note-input { width: 100%; padding: 6px 10px; border: 1.5px solid var(--border); border-radius: 8px; font-size: 12px; font-family: 'DM Sans', sans-serif; outline: none; resize: none; min-height: 40px; transition: border-color 0.2s; }
-    .note-input:focus { border-color: var(--teal); }
-    .save-bar { background: var(--white); border-radius: 16px; padding: 20px 28px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 12px rgba(0,0,0,0.06); flex-wrap: wrap; gap: 12px; }
-    .save-info { font-size: 13px; color: var(--muted); }
-    .btn-save { background: linear-gradient(135deg, var(--teal), var(--teal-dark)); color: white; border: none; padding: 12px 32px; border-radius: 10px; font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.2s; }
-    .btn-save:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(4,138,129,0.35); }
-    .saved-msg { font-size: 13px; color: var(--green); font-weight: 500; display: none; }
-    .calendar-section { background: var(--white); border-radius: 16px; padding: 24px 28px; margin-bottom: 24px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
-    .section-title { font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700; color: var(--navy); margin-bottom: 18px; display: flex; align-items: center; gap: 10px; }
-    .cal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
-    .cal-month { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; color: var(--navy); }
-    .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
-    .cal-day-name { text-align: center; font-size: 11px; font-weight: 600; color: var(--muted); padding: 4px; text-transform: uppercase; }
-    .cal-day { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; border-radius: 8px; font-size: 13px; cursor: pointer; transition: all 0.15s; position: relative; }
-    .cal-day:hover { background: var(--teal-light); color: var(--teal-dark); }
-    .cal-day.today { background: var(--teal); color: white; font-weight: 700; }
-    .cal-day.has-hours { border: 2px solid var(--teal-light); }
-    .cal-day.has-hours::after { content: ''; position: absolute; bottom: 3px; left: 50%; transform: translateX(-50%); width: 4px; height: 4px; background: var(--teal); border-radius: 50%; }
-    .cal-day.today::after { background: white; }
-    .cal-day.other-month { color: #d1d5db; cursor: default; }
-    .cal-day.other-month:hover { background: none; }
-    .cal-day.in-week { background: rgba(4,138,129,0.08); }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    :root{--teal:#048A81;--teal-dark:#036B63;--teal-light:#e0f2f1;--navy:#2E4057;--cream:#F7F5F0;--white:#fff;--red:#E05C5C;--green:#3DB88B;--amber:#F59E0B;--text:#1a1a2e;--muted:#6b7280;--border:#e5e7eb;}
+    body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);min-height:100vh;}
+    nav{background:var(--navy);padding:0 32px;display:flex;align-items:center;justify-content:space-between;height:64px;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,0.2);}
+    .nav-brand{font-family:'Syne',sans-serif;font-weight:800;font-size:18px;color:white;}
+    .nav-brand span{color:var(--teal);}
+    .nav-right{display:flex;align-items:center;gap:16px;}
+    .user-pill{background:rgba(255,255,255,0.1);border-radius:20px;padding:6px 14px;font-size:13px;color:white;}
+    .btn-logout{background:transparent;border:1.5px solid rgba(255,255,255,0.3);color:white;padding:7px 16px;border-radius:8px;font-size:13px;font-family:'DM Sans',sans-serif;cursor:pointer;}
+    .btn-logout:hover{background:rgba(255,255,255,0.1);}
+    .nav-link{color:rgba(255,255,255,0.75);font-size:13px;text-decoration:none;padding:6px 12px;border-radius:8px;transition:all 0.2s;}
+    .nav-link:hover{color:white;background:rgba(255,255,255,0.1);}
+    .container{max-width:1100px;margin:0 auto;padding:32px 24px;}
+    .week-bar{background:var(--white);border-radius:16px;padding:20px 28px;display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;box-shadow:0 2px 12px rgba(0,0,0,0.06);flex-wrap:wrap;gap:16px;}
+    .week-nav{display:flex;align-items:center;gap:14px;}
+    .week-btn{width:36px;height:36px;border-radius:8px;border:1.5px solid var(--border);background:white;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;transition:all 0.2s;color:var(--navy);}
+    .week-btn:hover{border-color:var(--teal);color:var(--teal);}
+    .week-label{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:var(--navy);}
+    .week-total{background:var(--teal-light);color:var(--teal-dark);padding:8px 20px;border-radius:20px;font-family:'Syne',sans-serif;font-weight:700;font-size:14px;}
+    .btn-today{background:var(--teal);color:white;border:none;padding:8px 18px;border-radius:8px;cursor:pointer;font-family:'Syne',sans-serif;font-size:13px;font-weight:600;}
+    .days-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:12px;margin-bottom:24px;}
+    @media(max-width:900px){.days-grid{grid-template-columns:repeat(4,1fr);}}
+    @media(max-width:600px){.days-grid{grid-template-columns:repeat(2,1fr);}}
+    .day-card{background:var(--white);border-radius:14px;padding:16px;border:2px solid var(--border);box-shadow:0 2px 8px rgba(0,0,0,0.04);}
+    .day-card.today{border-color:var(--teal);}
+    .day-card.weekend{background:#f9fafb;}
+    .day-card.approved{border-color:var(--green);background:#f0fdf4;}
+    .day-card.rejected{border-color:var(--red);background:#fef2f2;}
+    .day-name{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--muted);margin-bottom:2px;}
+    .day-date{font-size:20px;font-weight:600;color:var(--navy);margin-bottom:8px;}
+    .day-card.today .day-date{color:var(--teal);}
+    .approval-badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;margin-bottom:10px;}
+    .approval-badge.pending{background:#fef3c7;color:#92400e;}
+    .approval-badge.approved{background:#dcfce7;color:#166534;}
+    .approval-badge.rejected{background:#fef2f2;color:var(--red);}
+    .time-row{display:flex;flex-direction:column;gap:5px;margin-bottom:7px;}
+    .time-row label{font-size:11px;color:var(--muted);font-weight:500;}
+    .req{color:var(--red);}
+    .time-input{width:100%;padding:7px 10px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:'DM Sans',sans-serif;outline:none;}
+    .time-input:focus{border-color:var(--teal);}
+    .time-input:disabled{background:#f3f4f6;color:var(--muted);cursor:not-allowed;}
+    .hours-badge{text-align:center;padding:6px 8px;background:var(--teal-light);color:var(--teal-dark);border-radius:8px;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;margin-top:4px;}
+    .hours-badge.zero{background:#f3f4f6;color:var(--muted);}
+    .note-input{width:100%;padding:6px 10px;border:1.5px solid var(--border);border-radius:8px;font-size:12px;font-family:'DM Sans',sans-serif;outline:none;resize:none;min-height:50px;}
+    .note-input:focus{border-color:var(--teal);}
+    .note-input:disabled{background:#f3f4f6;cursor:not-allowed;}
+    .note-input.required-empty{border-color:var(--red);}
+    .save-bar{background:var(--white);border-radius:16px;padding:20px 28px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 12px rgba(0,0,0,0.06);flex-wrap:wrap;gap:12px;}
+    .btn-save{background:linear-gradient(135deg,var(--teal),var(--teal-dark));color:white;border:none;padding:12px 32px;border-radius:10px;font-family:'Syne',sans-serif;font-size:14px;font-weight:700;cursor:pointer;}
+    .btn-save:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(4,138,129,0.35);}
+    .saved-msg{font-size:13px;color:var(--green);font-weight:500;display:none;}
+    .error-msg{font-size:13px;color:var(--red);font-weight:500;display:none;}
+    .calendar-section{background:var(--white);border-radius:16px;padding:24px 28px;margin-bottom:24px;box-shadow:0 2px 12px rgba(0,0,0,0.06);}
+    .section-title{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:var(--navy);margin-bottom:18px;display:flex;align-items:center;gap:10px;}
+    .cal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+    .cal-month{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:var(--navy);}
+    .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;}
+    .cal-day-name{text-align:center;font-size:11px;font-weight:600;color:var(--muted);padding:4px;text-transform:uppercase;}
+    .cal-day{aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:8px;font-size:13px;cursor:pointer;transition:all 0.15s;position:relative;}
+    .cal-day:hover{background:var(--teal-light);color:var(--teal-dark);}
+    .cal-day.today{background:var(--teal);color:white;font-weight:700;}
+    .cal-day.has-hours::after{content:'';position:absolute;bottom:3px;left:50%;transform:translateX(-50%);width:4px;height:4px;background:var(--teal);border-radius:50%;}
+    .cal-day.today::after{background:white;}
+    .cal-day.other-month{color:#d1d5db;cursor:default;}
+    .cal-day.other-month:hover{background:none;}
+    .cal-day.in-week{background:rgba(4,138,129,0.08);}
   </style>
 </head>
 <body>
@@ -111,128 +109,157 @@
   <div class="save-bar">
     <div>
       <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:15px;color:var(--navy)">Save Timesheet</div>
-      <div class="save-info">All changes are saved per week for this device.</div>
+      <div style="font-size:13px;color:var(--muted)">Notes <span style="color:var(--red)">*</span> required for days with hours. Approved days are locked.</div>
     </div>
     <div style="display:flex;align-items:center;gap:16px;">
-      <span class="saved-msg" id="savedMsg">✓ Saved successfully!</span>
+      <span class="error-msg" id="errorMsg"></span>
+      <span class="saved-msg" id="savedMsg">✓ Saved!</span>
       <button class="btn-save" onclick="saveWeek()">Save Week</button>
     </div>
   </div>
 </div>
 <script src="auth.js"></script>
 <script>
-  const user = Auth.requireAuth();
-  if (user) {
-    document.getElementById('userPill').textContent = '👤 ' + user.name;
-    if (user.role === 'admin') document.getElementById('adminLink').style.display = 'inline-block';
+  const user=Auth.requireAuth();
+  if(user){
+    document.getElementById('userPill').textContent='👤 '+user.name;
+    if(user.role==='admin')document.getElementById('adminLink').style.display='inline-block';
   }
-  const DAY_SHORT = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-  const MONTH_NAMES = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-  let currentWeekStart = getMonday(new Date());
-  let calMonth = new Date();
-  function getMonday(d) {
-    const day = new Date(d); const dow = day.getDay();
-    const diff = dow === 0 ? -6 : 1 - dow;
-    day.setDate(day.getDate() + diff); day.setHours(0,0,0,0); return day;
+  const DAY_SHORT=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const MONTH_NAMES=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  let currentWeekStart=getMonday(new Date());
+  let calMonth=new Date();
+
+  function getMonday(d){const day=new Date(d);const dow=day.getDay();const diff=dow===0?-6:1-dow;day.setDate(day.getDate()+diff);day.setHours(0,0,0,0);return day;}
+  function dateKey(d){return d.toISOString().slice(0,10);}
+  function loadWeekData(uid,wk){const r=localStorage.getItem(`slnt_ts_${uid}_${wk}`);return r?JSON.parse(r):{};}
+  function saveWeekData(uid,wk,data){localStorage.setItem(`slnt_ts_${uid}_${wk}`,JSON.stringify(data));}
+  function getApprovals(uid){const r=localStorage.getItem(`slnt_approvals_${uid}`);return r?JSON.parse(r):{};}
+
+  function calcHours(start,end,brk){
+    if(!start||!end)return 0;
+    const[sh,sm]=start.split(':').map(Number);const[eh,em]=end.split(':').map(Number);
+    let diff=(eh*60+em)-(sh*60+sm);diff-=(parseInt(brk)||0);
+    return diff>0?Math.round(diff/60*10)/10:0;
   }
-  function dateKey(d) { return d.toISOString().slice(0,10); }
-  function getTSKey(userId, weekKey) { return `slnt_ts_${userId}_${weekKey}`; }
-  function loadWeekData(userId, weekKey) { const raw = localStorage.getItem(getTSKey(userId, weekKey)); return raw ? JSON.parse(raw) : {}; }
-  function saveWeekData(userId, weekKey, data) { localStorage.setItem(getTSKey(userId, weekKey), JSON.stringify(data)); }
-  function calcHours(start, end, breakMins) {
-    if (!start || !end) return 0;
-    const [sh, sm] = start.split(':').map(Number);
-    const [eh, em] = end.split(':').map(Number);
-    let diff = (eh * 60 + em) - (sh * 60 + sm);
-    diff -= (parseInt(breakMins) || 0);
-    return diff > 0 ? Math.round(diff / 60 * 10) / 10 : 0;
-  }
-  function changeWeek(dir) { currentWeekStart = new Date(currentWeekStart); currentWeekStart.setDate(currentWeekStart.getDate() + dir * 7); renderWeek(); renderCalendar(); }
-  function goToToday() { currentWeekStart = getMonday(new Date()); calMonth = new Date(); renderWeek(); renderCalendar(); }
-  function changeMonth(dir) { calMonth = new Date(calMonth.getFullYear(), calMonth.getMonth() + dir, 1); renderCalendar(); }
-  function renderWeek() {
-    const weekKey = dateKey(currentWeekStart);
-    const data = loadWeekData(user.id, weekKey);
-    const today = dateKey(new Date());
-    const end = new Date(currentWeekStart); end.setDate(end.getDate() + 6);
-    document.getElementById('weekLabel').textContent = `${currentWeekStart.getDate()} ${MONTH_NAMES[currentWeekStart.getMonth()]} — ${end.getDate()} ${MONTH_NAMES[end.getMonth()]} ${end.getFullYear()}`;
-    const grid = document.getElementById('daysGrid'); grid.innerHTML = ''; let total = 0;
-    for (let i = 0; i < 7; i++) {
-      const day = new Date(currentWeekStart); day.setDate(day.getDate() + i);
-      const dk = dateKey(day);
-      const isToday = dk === today;
-      const isWeekend = day.getDay() === 0 || day.getDay() === 6;
-      const entry = data[dk] || { start: '', end: '', breakMins: '', km: '', note: '' };
-      const hrs = calcHours(entry.start, entry.end, entry.breakMins);
-      total += hrs;
-      const card = document.createElement('div');
-      card.className = `day-card${isToday?' today':''}${isWeekend?' weekend':''}`;
-      card.innerHTML = `
+
+  function changeWeek(dir){currentWeekStart=new Date(currentWeekStart);currentWeekStart.setDate(currentWeekStart.getDate()+dir*7);renderWeek();renderCalendar();}
+  function goToToday(){currentWeekStart=getMonday(new Date());calMonth=new Date();renderWeek();renderCalendar();}
+  function changeMonth(dir){calMonth=new Date(calMonth.getFullYear(),calMonth.getMonth()+dir,1);renderCalendar();}
+
+  function renderWeek(){
+    const wk=dateKey(currentWeekStart);
+    const data=loadWeekData(user.id,wk);
+    const approvals=getApprovals(user.id);
+    const today=dateKey(new Date());
+    const end=new Date(currentWeekStart);end.setDate(end.getDate()+6);
+    document.getElementById('weekLabel').textContent=`${currentWeekStart.getDate()} ${MONTH_NAMES[currentWeekStart.getMonth()]} — ${end.getDate()} ${MONTH_NAMES[end.getMonth()]} ${end.getFullYear()}`;
+    const grid=document.getElementById('daysGrid');grid.innerHTML='';let total=0;
+
+    for(let i=0;i<7;i++){
+      const day=new Date(currentWeekStart);day.setDate(day.getDate()+i);
+      const dk=dateKey(day);
+      const entry=data[dk]||{start:'',end:'',breakMins:'',km:'',note:''};
+      const hrs=calcHours(entry.start,entry.end,entry.breakMins);
+      const approval=approvals[dk]||'pending';
+      const isApproved=approval==='approved';
+      const isRejected=approval==='rejected';
+      const hasHours=entry.start||entry.end;
+      total+=hrs;
+
+      let cls='day-card';
+      if(dk===today)cls+=' today';
+      if(day.getDay()===0||day.getDay()===6)cls+=' weekend';
+      if(isApproved&&hasHours)cls+=' approved';
+      if(isRejected&&hasHours)cls+=' rejected';
+
+      let badge='';
+      if(hasHours){
+        if(isApproved)badge='<div class="approval-badge approved">✓ Approved</div>';
+        else if(isRejected)badge='<div class="approval-badge rejected">✗ Rejected — please update</div>';
+        else badge='<div class="approval-badge pending">⏳ Pending Approval</div>';
+      }
+
+      const dis=isApproved?'disabled':'';
+      const card=document.createElement('div');
+      card.className=cls;
+      card.innerHTML=`
         <div class="day-name">${DAY_SHORT[day.getDay()]}</div>
         <div class="day-date">${day.getDate()}</div>
-        <div class="time-row"><label>Start Time</label><input type="time" class="time-input" id="start_${dk}" value="${entry.start}" onchange="updateHours('${dk}')"/></div>
-        <div class="time-row"><label>End Time</label><input type="time" class="time-input" id="end_${dk}" value="${entry.end}" onchange="updateHours('${dk}')"/></div>
-        <div class="time-row"><label>Break (mins)</label><input type="number" class="time-input" id="break_${dk}" value="${entry.breakMins||''}" min="0" max="480" placeholder="0" onchange="updateHours('${dk}')"/></div>
-        <div class="time-row"><label>Kilometres (km)</label><input type="number" class="time-input" id="km_${dk}" value="${entry.km||''}" min="0" placeholder="0" step="0.1"/></div>
+        ${badge}
+        <div class="time-row"><label>Start Time</label><input type="time" class="time-input" id="start_${dk}" value="${entry.start}" onchange="updateHours('${dk}')" ${dis}/></div>
+        <div class="time-row"><label>End Time</label><input type="time" class="time-input" id="end_${dk}" value="${entry.end}" onchange="updateHours('${dk}')" ${dis}/></div>
+        <div class="time-row"><label>Break (mins)</label><input type="number" class="time-input" id="break_${dk}" value="${entry.breakMins||''}" min="0" placeholder="0" onchange="updateHours('${dk}')" ${dis}/></div>
+        <div class="time-row"><label>Kilometres (km)</label><input type="number" class="time-input" id="km_${dk}" value="${entry.km||''}" min="0" placeholder="0" step="0.1" ${dis}/></div>
         <div class="hours-badge ${hrs===0?'zero':''}" id="hrs_${dk}">${hrs===0?'No hours':hrs+' hrs'}</div>
-        <div class="time-row" style="margin-top:8px"><label>Notes</label><textarea class="note-input" id="note_${dk}" placeholder="Optional note...">${entry.note||''}</textarea></div>`;
+        <div class="time-row" style="margin-top:8px"><label>Notes <span class="req">*</span></label><textarea class="note-input" id="note_${dk}" placeholder="Required if hours entered..." ${dis}>${entry.note||''}</textarea></div>`;
       grid.appendChild(card);
     }
-    document.getElementById('weekTotal').textContent = total.toFixed(1);
+    document.getElementById('weekTotal').textContent=total.toFixed(1);
   }
-  function updateHours(dk) {
-    const start = document.getElementById('start_'+dk)?.value;
-    const end = document.getElementById('end_'+dk)?.value;
-    const breakMins = document.getElementById('break_'+dk)?.value;
-    const hrs = calcHours(start, end, breakMins);
-    const badge = document.getElementById('hrs_'+dk);
-    if (badge) { badge.textContent = hrs === 0 ? 'No hours' : hrs + ' hrs'; badge.className = 'hours-badge ' + (hrs === 0 ? 'zero' : ''); }
-    let total = 0;
-    for (let i = 0; i < 7; i++) {
-      const day = new Date(currentWeekStart); day.setDate(day.getDate() + i);
-      const d = dateKey(day);
-      total += calcHours(document.getElementById('start_'+d)?.value, document.getElementById('end_'+d)?.value, document.getElementById('break_'+d)?.value);
+
+  function updateHours(dk){
+    const hrs=calcHours(document.getElementById('start_'+dk)?.value,document.getElementById('end_'+dk)?.value,document.getElementById('break_'+dk)?.value);
+    const badge=document.getElementById('hrs_'+dk);
+    if(badge){badge.textContent=hrs===0?'No hours':hrs+' hrs';badge.className='hours-badge '+(hrs===0?'zero':'');}
+    let total=0;
+    for(let i=0;i<7;i++){const day=new Date(currentWeekStart);day.setDate(day.getDate()+i);const d=dateKey(day);total+=calcHours(document.getElementById('start_'+d)?.value,document.getElementById('end_'+d)?.value,document.getElementById('break_'+d)?.value);}
+    document.getElementById('weekTotal').textContent=total.toFixed(1);
+  }
+
+  function saveWeek(){
+    const wk=dateKey(currentWeekStart);
+    const approvals=getApprovals(user.id);
+    const data={};const missing=[];
+
+    for(let i=0;i<7;i++){
+      const day=new Date(currentWeekStart);day.setDate(day.getDate()+i);const dk=dateKey(day);
+      const start=document.getElementById('start_'+dk)?.value||'';
+      const end=document.getElementById('end_'+dk)?.value||'';
+      const breakMins=document.getElementById('break_'+dk)?.value||'';
+      const km=document.getElementById('km_'+dk)?.value||'';
+      const note=document.getElementById('note_'+dk)?.value||'';
+      const noteEl=document.getElementById('note_'+dk);
+      if((start||end)&&!note){missing.push(DAY_SHORT[day.getDay()]);if(noteEl)noteEl.classList.add('required-empty');}
+      else{if(noteEl)noteEl.classList.remove('required-empty');}
+      if(approvals[dk]==='approved'){const ex=loadWeekData(user.id,wk);data[dk]=ex[dk]||{start,end,breakMins,km,note};}
+      else{data[dk]={start,end,breakMins,km,note};if((start||end)&&approvals[dk]!=='approved')approvals[dk]='pending';}
     }
-    document.getElementById('weekTotal').textContent = total.toFixed(1);
-  }
-  function saveWeek() {
-    const weekKey = dateKey(currentWeekStart); const data = {};
-    for (let i = 0; i < 7; i++) {
-      const day = new Date(currentWeekStart); day.setDate(day.getDate() + i); const dk = dateKey(day);
-      data[dk] = { start: document.getElementById('start_'+dk)?.value||'', end: document.getElementById('end_'+dk)?.value||'', breakMins: document.getElementById('break_'+dk)?.value||'', km: document.getElementById('km_'+dk)?.value||'', note: document.getElementById('note_'+dk)?.value||'' };
+
+    if(missing.length>0){
+      const el=document.getElementById('errorMsg');el.textContent=`Notes required for: ${missing.join(', ')}`;el.style.display='inline';
+      setTimeout(()=>{el.style.display='none';},4000);return;
     }
-    saveWeekData(user.id, weekKey, data);
-    const msg = document.getElementById('savedMsg'); msg.style.display = 'inline';
-    setTimeout(() => { msg.style.display = 'none'; }, 2500);
-    renderCalendar();
+    localStorage.setItem(`slnt_approvals_${user.id}`,JSON.stringify(approvals));
+    saveWeekData(user.id,wk,data);
+    const msg=document.getElementById('savedMsg');msg.style.display='inline';setTimeout(()=>{msg.style.display='none';},2500);
+    renderWeek();renderCalendar();
   }
-  function renderCalendar() {
-    document.getElementById('calMonth').textContent = `${MONTH_NAMES[calMonth.getMonth()]} ${calMonth.getFullYear()}`;
-    const grid = document.getElementById('calGrid'); grid.innerHTML = '';
-    DAY_SHORT.forEach(d => { const el = document.createElement('div'); el.className = 'cal-day-name'; el.textContent = d; grid.appendChild(el); });
-    const firstDay = new Date(calMonth.getFullYear(), calMonth.getMonth(), 1);
-    const lastDay = new Date(calMonth.getFullYear(), calMonth.getMonth() + 1, 0);
-    const startOffset = firstDay.getDay(); const today = dateKey(new Date());
-    const weekDays = new Set();
-    for (let i = 0; i < 7; i++) { const d = new Date(currentWeekStart); d.setDate(d.getDate() + i); weekDays.add(dateKey(d)); }
-    const savedDates = new Set();
-    for (let k in localStorage) { if (k.startsWith(`slnt_ts_${user.id}_`)) { const data = JSON.parse(localStorage.getItem(k)); Object.keys(data).forEach(dk => { if (data[dk].start || data[dk].end) savedDates.add(dk); }); } }
-    for (let i = 0; i < startOffset; i++) { const prev = new Date(firstDay); prev.setDate(prev.getDate() - (startOffset - i)); const el = document.createElement('div'); el.className = 'cal-day other-month'; el.textContent = prev.getDate(); grid.appendChild(el); }
-    for (let d = 1; d <= lastDay.getDate(); d++) {
-      const thisDate = new Date(calMonth.getFullYear(), calMonth.getMonth(), d);
-      const dk = dateKey(thisDate); const el = document.createElement('div');
-      let cls = 'cal-day';
-      if (dk === today) cls += ' today';
-      if (weekDays.has(dk)) cls += ' in-week';
-      if (savedDates.has(dk)) cls += ' has-hours';
-      el.className = cls; el.textContent = d;
-      el.onclick = () => { currentWeekStart = getMonday(thisDate); renderWeek(); renderCalendar(); };
+
+  function renderCalendar(){
+    document.getElementById('calMonth').textContent=`${MONTH_NAMES[calMonth.getMonth()]} ${calMonth.getFullYear()}`;
+    const grid=document.getElementById('calGrid');grid.innerHTML='';
+    DAY_SHORT.forEach(d=>{const el=document.createElement('div');el.className='cal-day-name';el.textContent=d;grid.appendChild(el);});
+    const firstDay=new Date(calMonth.getFullYear(),calMonth.getMonth(),1);
+    const lastDay=new Date(calMonth.getFullYear(),calMonth.getMonth()+1,0);
+    const startOffset=firstDay.getDay();const today=dateKey(new Date());
+    const weekDays=new Set();
+    for(let i=0;i<7;i++){const d=new Date(currentWeekStart);d.setDate(d.getDate()+i);weekDays.add(dateKey(d));}
+    const savedDates=new Set();
+    for(let k in localStorage){if(k.startsWith(`slnt_ts_${user.id}_`)){try{const data=JSON.parse(localStorage.getItem(k));Object.keys(data).forEach(dk=>{if(data[dk].start||data[dk].end)savedDates.add(dk);});}catch(e){}}}
+    for(let i=0;i<startOffset;i++){const prev=new Date(firstDay);prev.setDate(prev.getDate()-(startOffset-i));const el=document.createElement('div');el.className='cal-day other-month';el.textContent=prev.getDate();grid.appendChild(el);}
+    for(let d=1;d<=lastDay.getDate();d++){
+      const thisDate=new Date(calMonth.getFullYear(),calMonth.getMonth(),d);const dk=dateKey(thisDate);
+      const el=document.createElement('div');let cls='cal-day';
+      if(dk===today)cls+=' today';if(weekDays.has(dk))cls+=' in-week';if(savedDates.has(dk))cls+=' has-hours';
+      el.className=cls;el.textContent=d;
+      el.onclick=()=>{currentWeekStart=getMonday(thisDate);renderWeek();renderCalendar();};
       grid.appendChild(el);
     }
-    const remaining = 42 - (startOffset + lastDay.getDate());
-    for (let i = 1; i <= remaining; i++) { const el = document.createElement('div'); el.className = 'cal-day other-month'; el.textContent = i; grid.appendChild(el); }
+    const rem=42-(startOffset+lastDay.getDate());
+    for(let i=1;i<=rem;i++){const el=document.createElement('div');el.className='cal-day other-month';el.textContent=i;grid.appendChild(el);}
   }
-  renderWeek(); renderCalendar();
+  renderWeek();renderCalendar();
 </script>
 </body>
 </html>
